@@ -37,7 +37,7 @@
             <div class="projects">
                 <div class="sideHdr">Projects</div>
                 <div class="projectsDisplay"></div>
-                <button class="btn btnTxt">+ Add Project</button>
+                <button class="btn btnTxt" id="addProject">+ Add Project</button>
             </div>
         </div>
         <div class="tasks"></div>
@@ -78,6 +78,15 @@
                 <input type="submit" name= "submit" id="submit">
             </form>
         </div>
+    </div>
+    <div class="projectModal">
+        <form class="projForm">
+            <div class="wrapper">
+                <label class="label" for="projName">Project Name</label>
+                <input type="text" class="modalInput" id="projName" required>
+            </div>
+            <input type="submit" name= "submit" id="projSubmit">
+        </form>
     </div>
 </body>
 </html>

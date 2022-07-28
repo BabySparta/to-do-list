@@ -317,3 +317,39 @@
       transition: 0.2s ease-in-out;
       background-color: rgb(190, 190, 190);
   }
+
+/* Project Modal */ 
+
+.projectModal {
+    display: none;
+    position: absolute;
+    top: 20vh;
+    left: 0;
+    right: 0;
+    margin-right: auto;
+    margin-left: auto;
+    z-index: 1;
+    background-color: var(--secondaryColor);
+    border-radius: 8px;
+    width: fit-content;
+    height: fit-content;
+    padding: 16px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 24px;
+}
+
+#projSubmit {
+    border: 2px solid var(--mainColor);
+    width: fit-content;
+    height: fit-content;
+    padding: 8px;
+    border-radius: 4px;
+    background-color: var(--secondaryColor);
+    color: black;
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: "Monaco", 'Courier New', Courier, monospace;
+    transition: 0.2s ease-in-out;
+}

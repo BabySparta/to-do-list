@@ -91,7 +91,9 @@ importantBtn.addEventListener('click', () => {
 
 /* Add Task */
 
-form.onsubmit = function() {
+const taskForm = document.querySelector('.modalForm');
+
+taskForm.onsubmit = function() {
     event.preventDefault();
 
     const name = document.querySelector('#name').value;
@@ -105,3 +107,22 @@ form.onsubmit = function() {
     console.log(currentProject);
     console.log(projects);
 };
+
+/* Add Project */
+
+const addProject = document.querySelector('#addProject');
+
+addProject.addEventListener('click', () => {
+    document.querySelector('.projectModal').style.display = 'flex'
+})
+
+const projForm = document.querySelector('.projForm');
+
+projForm.onsubmit = function() {
+    event.preventDefault();
+
+    const projName = document.querySelector('#projName').value;
+    const newProject = new project(projName);
+    projects.push(newProject);
+    document.querySelector('.projectModal').style.display = 'none'
+}
