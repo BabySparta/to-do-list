@@ -119,21 +119,6 @@
     padding: 8px;
 }
 
-.project {
-    background-color: var(--secondaryColor);
-    font-size: 1.3rem;
-    font-family: 'Courier New', Courier, monospace;
-    width: 90%;
-    text-align: left;
-    border-radius: 4px;
-    transition: 0.2s ease-in-out;
-    padding: 8px;
-    display: flex;
-    justify-content: left;
-    align-items: flex-end;
-    gap: 12px;
-}
-
 .sideIcon {
     width: 1.8rem;
     height: 1.8rem;
