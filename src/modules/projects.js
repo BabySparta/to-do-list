@@ -1,4 +1,3 @@
-
 export default class project {
     constructor(name) {
         this.name = name;
@@ -22,8 +21,8 @@ export default class project {
     }
 
     addTask(newTask) {
-        if (this.tasks.find((task) => task.getName() === newTask)) {return};
-        this.tasks.push(newTask);
+        if (this.tasks.find((task) => task.getName() === newTask)) {return}
+        else {this.tasks.push(newTask)};
     }
 
     deleteTask(delTask) {

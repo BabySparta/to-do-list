@@ -17,19 +17,19 @@
         <div class="sidebar">
             <div class="home">
                 <div class="sideHdr">Home</div>
-                <button class="btn active" id="all">
+                <button class="btn project active" id="all">
                     <img class="sideIcon" src="./imgFont/inbox.png">
                     <div class="btnTxt">Inbox</div>
                 </button>
-                <button class="btn" id="today">
+                <button class="btn project" id="today">
                     <img class="sideIcon" src="./imgFont/calendar-today.png">
                     <div class="btnTxt">Today</div>
                 </button>
-                <button class="btn" id="upcoming">
+                <button class="btn project" id="upcoming">
                     <img class="sideIcon" src="./imgFont/calendar-week.png">
                     <div class="btnTxt">Upcoming</div>
                 </button>
-                <button class="btn" id="important">
+                <button class="btn project" id="important">
                     <img class="sideIcon" src="./imgFont/star-outline.png">
                     <div class="btnTxt">Important</div>
                 </button>
@@ -83,7 +83,7 @@
         <form class="projForm">
             <div class="wrapper">
                 <label class="label" for="projName">Project Name</label>
-                <input type="text" class="modalInput" id="projName" required>
+                <input type="text" class="modalInput" id="projName" maxlength="20" required>
             </div>
             <input type="submit" name= "submit" id="projSubmit">
         </form>

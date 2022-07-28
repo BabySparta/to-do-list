@@ -43,51 +43,53 @@ let currentProject = all;
 
 const allBtn = document.querySelector('#all');
 allBtn.addEventListener('click', () => {
-    allBtn.classList.remove('active');
-    upcomingBtn.classList.remove('active');
-    todayBtn.classList.remove('active');
-    importantBtn.classList.remove('active');
-
-    allBtn.classList.add('active');
-    currentProject = all;
-    document.querySelector('.newTask').style.display = 'flex'
+    addEvent(all, allBtn);
 })
 
 const todayBtn = document.querySelector('#today');
 todayBtn.addEventListener('click', () => {
-    allBtn.classList.remove('active');
-    upcomingBtn.classList.remove('active');
-    todayBtn.classList.remove('active');
-    importantBtn.classList.remove('active');
-
-    todayBtn.classList.add('active');
-    currentProject = today;
+    addEvent(today, todayBtn);
     document.querySelector('.newTask').style.display = 'none'
 })
 
 const upcomingBtn = document.querySelector('#upcoming');
 upcomingBtn.addEventListener('click', () => {
-    allBtn.classList.remove('active');
-    upcomingBtn.classList.remove('active');
-    todayBtn.classList.remove('active');
-    importantBtn.classList.remove('active');
-
-    upcomingBtn.classList.add('active');
-    currentProject = upcoming;
+    addEvent(upcoming, upcomingBtn);
     document.querySelector('.newTask').style.display = 'none'
 })
 
 const importantBtn = document.querySelector('#important');
 importantBtn.addEventListener('click', () => {
-    allBtn.classList.remove('active');
-    upcomingBtn.classList.remove('active');
-    todayBtn.classList.remove('active');
-    importantBtn.classList.remove('active');
-
-    importantBtn.classList.add('active');
-    currentProject = important;
-    document.querySelector('.newTask').style.display = 'none'
+    addEvent(important, importantBtn);
+    document.querySelector('.newTask').style.display = 'none';
 });
+
+const addEvent = (name, query) => {
+    const allPro = document.querySelectorAll('.project');
+    allPro.forEach((item) => {item.classList.remove('active')})
+
+    query.classList.add('active');
+    currentProject = name;
+    document.querySelector('.newTask').style.display = 'flex';
+}
+
+
+/* Display project */
+
+const displayProject = (name) => {
+    const allProjects = document.querySelector('.projectsDisplay');
+
+    const button = document.createElement('button');
+    button.classList.add('btn');
+    button.classList.add('project');
+    button.id = name.split(' ').join('');
+    const text = document.createElement('div');
+    text.classList.add('btnTxt');
+    text.textContent = name;
+
+    button.appendChild(text);
+    allProjects.appendChild(button);
+}
 
 /* Add Task */
 
@@ -104,8 +106,6 @@ taskForm.onsubmit = function() {
     const newTask = new task(name, desc, date, priority);
     currentProject.addTask(newTask);
     modal.style.display = "none";   
-    console.log(currentProject);
-    console.log(projects);
 };
 
 /* Add Project */
@@ -123,6 +123,13 @@ projForm.onsubmit = function() {
 
     const projName = document.querySelector('#projName').value;
     const newProject = new project(projName);
+    console.log(projects);
     projects.push(newProject);
-    document.querySelector('.projectModal').style.display = 'none'
+    displayProject(projName);
+
+    const buttonElement = document.getElementById(projName.split(' ').join(''));
+    buttonElement.addEventListener('click', () => {
+        addEvent(projName, buttonElement);  
+    })
+    document.querySelector('.projectModal').style.display = 'none';
 }
