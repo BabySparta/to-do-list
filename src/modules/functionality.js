@@ -8,13 +8,21 @@ const modal = document.querySelector(".modal");
 const span = document.querySelector(".close");
 const form = document.querySelector('.modalForm');
 
+const projModal = document.querySelector('.projectModal');
+const projSpan = document.querySelector('.closeProj');
+
 addBtn.onclick = function() {
     form.reset();
     modal.style.display = "block"
+    projModal.style.display = 'none'
 }
 
 span.onclick = function() {
     modal.style.display = "none";
+}
+
+projSpan.onclick = function() {
+    projModal.style.display = "none"
 }
   
 window.onclick = function(event) {
@@ -80,15 +88,35 @@ const displayProject = (name) => {
     const allProjects = document.querySelector('.projectsDisplay');
 
     const button = document.createElement('button');
-    button.classList.add('btn');
+    button.classList.add('btnCustom');
     button.classList.add('project');
     button.id = name.split(' ').join('');
     const text = document.createElement('div');
     text.classList.add('btnTxt');
     text.textContent = name;
+    const remove = document.createElement('button');
+    remove.textContent = 'X'
+    remove.classList.add('remove');
 
     button.appendChild(text);
+    button.appendChild(remove);
     allProjects.appendChild(button);
+
+    remove.addEventListener('click', () => {
+        const active = document.querySelector('.active');
+
+        const deleteProj = () => {
+            const projText = active.firstChild
+            const projToRemove = projects.find((proj) => proj.getName() === projText.textContent); 
+                const index = projects.indexOf(projToRemove);
+                if (index > -1) { 
+                  projects.splice(index, 1);
+                }
+            return console.log(projects);
+        }
+
+        deleteProj();
+    })
 }
 
 /* Add Task */
@@ -123,13 +151,17 @@ projForm.onsubmit = function() {
 
     const projName = document.querySelector('#projName').value;
     const newProject = new project(projName);
-    console.log(projects);
-    projects.push(newProject);
-    displayProject(projName);
-
+    appendProject(newProject, projName);
     const buttonElement = document.getElementById(projName.split(' ').join(''));
     buttonElement.addEventListener('click', () => {
         addEvent(projName, buttonElement);  
     })
     document.querySelector('.projectModal').style.display = 'none';
 }
+
+const appendProject = (newProject, projName) => {
+    if (projects.find((proj) => proj.getName() === newProject.getName())) {return}
+    else {projects.push(newProject); displayProject(projName);}
+}
+
+/* Remove Project */

@@ -74,7 +74,36 @@
     justify-content: left;
     align-items: flex-end;
     gap: 12px;
-    
+}
+
+.btnCustom {
+    outline: none;
+    border: none;
+    background-color: var(--secondaryColor);
+    width: 100%;
+    text-align: left;
+    border-radius: 4px;
+    transition: 0.2s ease-in-out;
+    padding: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.remove {
+    font-size: 1.3rem;
+    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: -2px;
+    border: none;
+    background-color: rgba(0,0,0,0);
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+}
+
+.remove:hover {
+    cursor: pointer;
 }
 
 .btn:hover, .project:hover {
@@ -296,7 +325,7 @@
       transition: 0.2s ease-in-out;
   }
   
-  #submit:hover {
+  #submit:hover, #projSubmit:hover {
       cursor: pointer;
       transform: scale(1.03);
       transition: 0.2s ease-in-out;
@@ -322,7 +351,29 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 24px;
+    gap: 12px;
+}
+
+.projForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.closeProj {
+    text-decoration: underline solid 4px var(--mainColor);
+    text-underline-offset: 4px;
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: 'Monaco', 'Courier New', Courier, monospace;
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.closeProj:hover {
+    background-color: var(--hover);
+    cursor: pointer;
 }
 
 #projSubmit {
@@ -337,4 +388,5 @@
     font-weight: 700;
     font-family: "Monaco", 'Courier New', Courier, monospace;
     transition: 0.2s ease-in-out;
+    margin-top: 16px;
 }
