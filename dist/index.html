@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="main.js" defer></script>
+</head>
+<body>
+    <div class="content">
+        <header class="header">
+            <img src="./imgFont/clipboard-check-multiple.png" alt="check" class="logo">
+            <div class="title">To-Do List</div>
+        </header>
+        <div class="sidebar">
+            <div class="home">
+                <div class="sideHdr">Home</div>
+                <button class="btn active" id="all">
+                    <img class="sideIcon" src="./imgFont/inbox.png">
+                    <div class="btnTxt">Inbox</div>
+                </button>
+                <button class="btn" id="today">
+                    <img class="sideIcon" src="./imgFont/calendar-today.png">
+                    <div class="btnTxt">Today</div>
+                </button>
+                <button class="btn" id="upcoming">
+                    <img class="sideIcon" src="./imgFont/calendar-week.png">
+                    <div class="btnTxt">Upcoming</div>
+                </button>
+                <button class="btn" id="important">
+                    <img class="sideIcon" src="./imgFont/star-outline.png">
+                    <div class="btnTxt">Important</div>
+                </button>
+            </div>
+            <div class="projects">
+                <div class="sideHdr">Projects</div>
+                <div class="projectsDisplay"></div>
+                <button class="btn btnTxt">+ Add Project</button>
+            </div>
+        </div>
+        <div class="tasks"></div>
+    </div>
+    <div class="footer">
+        <div class="footerTxt">Made By: Brandon Young 2022</div>
+    </div>
+
+    <button class="newTask">+</button>
+
+    <div class="modal">
+        <div class="modalContent">
+            <div class="modalHeader">
+                <div class="modalTitle">Add Task</div>
+                <span class="close">&times;</span>
+            </div>
+            <form class="modalForm">
+                <div class="wrapper">
+                    <label class="label" for="name">Name</label>
+                    <input type="text" class="modalInput" id="name" required>
+                </div>
+                <div class="wrapper">
+                    <label class="label" for="desc">Description</label>
+                    <textarea type="text" class="modalInput" id="desc" cols="25" rows="3" maxlength="75"></textarea>
+                </div>
+                <div class="wrapper">
+                    <label class="label" for="due">Date Due</label>
+                    <input type="date" class="modalInput" id="due">
+                </div>
+                <div class="wrapperDrop">
+                    <label class="label"for="urgent">Priority</label>
+                    <select name="dropdown" class="modalDrop" id="urgent">
+                        <option value="low" selected>Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>  
+                    </select>
+                </div>
+                <input type="submit" name= "submit" id="submit">
+            </form>
+        </div>
+    </div>
+</body>
+</html>
