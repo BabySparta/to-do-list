@@ -103,19 +103,24 @@ const displayProject = (name) => {
     allProjects.appendChild(button);
 
     remove.addEventListener('click', () => {
-        const active = document.querySelector('.active');
-
         const deleteProj = () => {
-            const projText = active.firstChild
+            const projText = remove.parentElement.firstChild
             const projToRemove = projects.find((proj) => proj.getName() === projText.textContent); 
                 const index = projects.indexOf(projToRemove);
                 if (index > -1) { 
                   projects.splice(index, 1);
                 }
-            return console.log(projects);
+            
         }
 
+        const delDOM = () => {
+            remove.parentElement.remove();
+            currentProject = all;
+            const setProj = document.querySelector('#all');
+            setProj.classList.add('active');
+        }
         deleteProj();
+        delDOM(); 
     })
 }
 
@@ -164,4 +169,3 @@ const appendProject = (newProject, projName) => {
     else {projects.push(newProject); displayProject(projName);}
 }
 
-/* Remove Project */
