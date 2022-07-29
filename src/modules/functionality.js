@@ -35,23 +35,23 @@ window.onclick = function(event) {
 
 let projects = [];
 
-const all = new project('all');
-const today = new project('today');
-const upcoming = new project('upcoming');
-const important = new project('important');
+const inbox = new project('Inbox');
+const today = new project('Today');
+const upcoming = new project('Upcoming');
+const important = new project('Important');
 
-projects.push(all);
+projects.push(inbox);
 projects.push(today);
 projects.push(upcoming);
 projects.push(important);
 
-let currentProject = all;
+let currentProject = inbox;
 
 /* Set Project */
 
-const allBtn = document.querySelector('#all');
-allBtn.addEventListener('click', () => {
-    addEvent(all, allBtn);
+const inboxBtn = document.querySelector('#all');
+inboxBtn.addEventListener('click', () => {
+    addEvent(inbox, inboxBtn);
 })
 
 const todayBtn = document.querySelector('#today');
@@ -81,7 +81,9 @@ const addEvent = (name, query) => {
     document.querySelector('.newTask').style.display = 'flex';
     document.querySelector('.tasks').textContent = '';
     const currTasks = currentProject.getTasks();
-    currTasks.forEach((item) => displayTask(item.title, item.desc, item.dueDate, item.priority))
+    currTasks.forEach((item) => displayTask(item.title, item.desc, item.dueDate, item.priority));
+    const changeHeader = document.querySelector('.taskWrapTitle');
+    changeHeader.textContent = currentProject.getName();
 }
 
 
@@ -185,10 +187,8 @@ const displayTask = (title, desc, date, priority) => {
     taskTitle.classList.add('taskTitle');
     const taskDesc = document.createElement('div');
     taskDesc.classList.add('taskDesc');
-    const taskDue = document.createElement('input');
+    const taskDue = document.createElement('div');
     taskDue.classList.add('taskDue');
-    taskDue.type = "date";
-    taskDue.id = "due";
     const taskPriority = document.createElement('div');
     taskPriority.classList.add('taskPriority');
     const removeTask = document.createElement('button');
@@ -199,11 +199,16 @@ const displayTask = (title, desc, date, priority) => {
         taskBody.remove();
     })
 
+    const formattedDate = date.split('-').join('/');
 
     taskTitle.textContent = title;
     taskDesc.textContent = desc;
     taskPriority.textContent = "Priority: " + priority;
-    taskDue.value = "Due On: " + date;
+    if (priority === 'Low') {taskPriority.style.textDecoration = "underline 3px solid green"}
+    if (priority === 'Medium') {taskPriority.style.textDecoration = "underline 3px solid yellow"}
+    if (priority === 'High') {taskPriority.style.textDecoration = "underline 3px solid red"}
+    if (formattedDate === '') {taskDue.textContent = "Due On: Whenever"}
+    else {taskDue.textContent = "Due On: " + formattedDate}
 
 
     const wrapper1 = document.createElement('div');
@@ -216,12 +221,9 @@ const displayTask = (title, desc, date, priority) => {
     const wrapper3 = document.createElement('div');
     wrapper3.classList.add('wrapperTask');
     wrapper3.appendChild(taskDue);
-    const wrapper4 = document.createElement('div');
-    wrapper4.classList.add('wrapperTask');
-    wrapper4.appendChild(taskPriority);
+    wrapper3.appendChild(taskPriority);
 
     taskBody.appendChild(wrapper1);
     taskBody.appendChild(wrapper2);
     taskBody.appendChild(wrapper3);
-    taskBody.appendChild(wrapper4);
 }
