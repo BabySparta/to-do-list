@@ -112,15 +112,11 @@ const displayProject = (name) => {
                 }
             
         }
-
         const delDOM = () => {
             remove.parentElement.remove();
-            currentProject = all;
-            const setProj = document.querySelector('#all');
-            setProj.classList.add('active');
         }
         deleteProj();
-        delDOM(); 
+        delDOM();
     })
 }
 
@@ -161,6 +157,8 @@ projForm.onsubmit = function() {
     buttonElement.addEventListener('click', () => {
         addEvent(projName, buttonElement);  
     })
+    appendProject(newProject, projName);
+
     document.querySelector('.projectModal').style.display = 'none';
 }
 
@@ -169,3 +167,33 @@ const appendProject = (newProject, projName) => {
     else {projects.push(newProject); displayProject(projName);}
 }
 
+/* Display Tasks */
+
+const displayTask = (title, desc, date, priority) => {
+    const taskDiv = document.querySelector('.tasks');
+    const taskBody = document.createElement('div');
+    taskBody.classList.add('taskBody');
+    taskDiv.appendChild(taskBody);
+    taskBody.innerHTML = `
+            <div class="wrapperTask">
+                <div class="taskTitle"></div>
+            </div>
+            <div class="wrapperTask">
+                <div class="taskDesc"></div>
+            </div>
+            <div class="wrapperTask">
+                <input type="date" class="taskDue" id="due" value="2000-01-01">
+            </div>
+            <div class="wrapperTask">
+                <div class="taskPriority"></div>
+            </div>`
+    const taskTitle = document.querySelector('.taskTitle');
+    const taskDesc = document.querySelector('.taskDesc');
+    const taskPriority = document.querySelector('.taskPriority');
+
+    taskTitle.textContent = title;
+    taskDesc.textContent = desc;
+    taskPriority.textContent = priority;
+}
+
+displayTask(' a', 'ab', '2000-01-02', 'high');
