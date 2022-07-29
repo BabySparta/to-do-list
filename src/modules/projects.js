@@ -1,3 +1,5 @@
+import task from "./task";
+
 export default class project {
     constructor(name) {
         this.name = name;
@@ -26,6 +28,6 @@ export default class project {
     }
 
     deleteTask(delTask) {
-        this.tasks = this.tasks.filter((task) => task.name !== delTask)
+        this.tasks = this.tasks.filter((task) => task.getName() !== delTask)
     }
 }

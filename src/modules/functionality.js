@@ -79,6 +79,7 @@ const addEvent = (name, query) => {
     query.classList.add('active');
     currentProject = name;
     document.querySelector('.newTask').style.display = 'flex';
+    document.querySelector('.tasks').textContent = '';
     const currTasks = currentProject.getTasks();
     currTasks.forEach((item) => displayTask(item.title, item.desc, item.dueDate, item.priority))
 }
@@ -135,6 +136,7 @@ taskForm.onsubmit = function() {
     const priority = document.querySelector('#urgent').value;
 
     const newTask = new task(name, desc, date, priority);
+    newTask.setName(name);  
     currentProject.addTask(newTask);
     
     displayTask(name, desc, date, priority)
@@ -178,30 +180,48 @@ const displayTask = (title, desc, date, priority) => {
     const taskBody = document.createElement('div');
     taskBody.classList.add('taskBody');
     taskDiv.appendChild(taskBody);
-    taskBody.innerHTML = `
-            <div class="wrapperTask">
-                <div class="taskTitle"></div>
-            </div>
-            <div class="wrapperTask">
-                <div class="taskDesc"></div>
-            </div>
-            <div class="wrapperTask">
-                <input type="date" class="taskDue" id="due" value="2000-01-01">
-            </div>
-            <div class="wrapperTask">
-                <div class="taskPriority"></div>
-            </div>`
+ 
     const taskTitle = document.createElement('div');
     taskTitle.classList.add('taskTitle');
     const taskDesc = document.createElement('div');
     taskDesc.classList.add('taskDesc');
     const taskDue = document.createElement('input');
     taskDue.classList.add('taskDue');
+    taskDue.type = "date";
+    taskDue.id = "due";
     const taskPriority = document.createElement('div');
     taskPriority.classList.add('taskPriority');
+    const removeTask = document.createElement('button');
+    removeTask.classList.add('taskRemove');
+    removeTask.textContent = 'X';
+    removeTask.addEventListener('click', () => {
+        currentProject.deleteTask(title);
+        taskBody.remove();
+    })
+
 
     taskTitle.textContent = title;
     taskDesc.textContent = desc;
-    taskPriority.textContent = priority;
-    taskDue.value = date
+    taskPriority.textContent = "Priority: " + priority;
+    taskDue.value = "Due On: " + date;
+
+
+    const wrapper1 = document.createElement('div');
+    wrapper1.classList.add('wrapperTask');
+    wrapper1.appendChild(taskTitle);
+    wrapper1.appendChild(removeTask);
+    const wrapper2 = document.createElement('div');
+    wrapper2.classList.add('wrapperTask');
+    wrapper2.appendChild(taskDesc);
+    const wrapper3 = document.createElement('div');
+    wrapper3.classList.add('wrapperTask');
+    wrapper3.appendChild(taskDue);
+    const wrapper4 = document.createElement('div');
+    wrapper4.classList.add('wrapperTask');
+    wrapper4.appendChild(taskPriority);
+
+    taskBody.appendChild(wrapper1);
+    taskBody.appendChild(wrapper2);
+    taskBody.appendChild(wrapper3);
+    taskBody.appendChild(wrapper4);
 }
