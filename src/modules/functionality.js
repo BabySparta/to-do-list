@@ -79,6 +79,8 @@ const addEvent = (name, query) => {
     query.classList.add('active');
     currentProject = name;
     document.querySelector('.newTask').style.display = 'flex';
+    const currTasks = currentProject.getTasks();
+    currTasks.forEach((item) => displayTask(item.title, item.desc, item.dueDate, item.priority))
 }
 
 
@@ -134,6 +136,8 @@ taskForm.onsubmit = function() {
 
     const newTask = new task(name, desc, date, priority);
     currentProject.addTask(newTask);
+    
+    displayTask(name, desc, date, priority)
     modal.style.display = "none";   
 };
 
@@ -187,13 +191,17 @@ const displayTask = (title, desc, date, priority) => {
             <div class="wrapperTask">
                 <div class="taskPriority"></div>
             </div>`
-    const taskTitle = document.querySelector('.taskTitle');
-    const taskDesc = document.querySelector('.taskDesc');
-    const taskPriority = document.querySelector('.taskPriority');
+    const taskTitle = document.createElement('div');
+    taskTitle.classList.add('taskTitle');
+    const taskDesc = document.createElement('div');
+    taskDesc.classList.add('taskDesc');
+    const taskDue = document.createElement('input');
+    taskDue.classList.add('taskDue');
+    const taskPriority = document.createElement('div');
+    taskPriority.classList.add('taskPriority');
 
     taskTitle.textContent = title;
     taskDesc.textContent = desc;
     taskPriority.textContent = priority;
+    taskDue.value = date
 }
-
-displayTask(' a', 'ab', '2000-01-02', 'high');
