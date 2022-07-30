@@ -1,6 +1,6 @@
 import project from "./projects";
 import task from "./task";
-import { toDate, isThisWeek, subDays } from 'date-fns'
+import { toDate, isThisWeek, isToday } from 'date-fns'
 
 /* Modal */
 
@@ -57,23 +57,21 @@ inboxBtn.addEventListener('click', () => {
 
 const todayBtn = document.querySelector('#today');
 todayBtn.addEventListener('click', () => {
+    tasksForToday();
     addEvent(today, todayBtn);
     document.querySelector('.newTask').style.display = 'none'
-    findToday();
 })
 
 const upcomingBtn = document.querySelector('#upcoming');
 upcomingBtn.addEventListener('click', () => {
     addEvent(upcoming, upcomingBtn);
     document.querySelector('.newTask').style.display = 'none'
-    findWeek();
 })
 
 const importantBtn = document.querySelector('#important');
 importantBtn.addEventListener('click', () => {
     addEvent(important, importantBtn);
     document.querySelector('.newTask').style.display = 'none';
-    findImportant();
 });
 
 const addEvent = (name, query) => {
@@ -143,9 +141,9 @@ taskForm.onsubmit = function() {
     const newTask = new task(name, desc, date, priority);
     newTask.setName(name);  
     currentProject.addTask(newTask);
-    /*checkSpecial(date, newTask, priority);*/
+    checkSpecial(date, newTask, priority)
     displayTask(name, desc, date, priority)
-    modal.style.display = "none";   
+    modal.style.display = "none";
 };
 
 /* Date Functions */
@@ -168,50 +166,13 @@ function isDateInThisWeek(date) {
       return isThisWeek(formDate);
   }
 
-const findToday = () => {
-    today.setTasks('');
-    projects.forEach((project) => {
-        if (project === today || project === upcoming || project === important) {return}
-
-        const projTasks = project.tasks;
-        console.log(projTasks);
-        projTasks.forEach((task) => {
-            const todayForm = new Date().toLocaleDateString();
-            const todayArray = todayForm.split('/');
-            const month = todayArray[0];
-            const day = todayArray[1];
-            const year = todayArray[2];
-            let todayFormatted = year + '-' + month + '-' + day;
-            if (parseInt(month) < 10) {todayFormatted = year + '-0' + month + '-' + day}
-
-            const taskDue = task.getDate();
-
-            if (taskDue === todayFormatted) {today.addTask(task)}
-        })
-    })
-}
-
-const findWeek = () => {
-    upcoming.setTasks('');
-    projects.forEach((project) => {
-        if (project.getName() === 'Today' || project.getName() === 'Upcoming' || project.getName() === 'Important') {return}
-        const projTasks = project.tasks
-        projTasks.forEach((task) => {
-            const date = task.getDate();
-            if (isDateInThisWeek(date)) {upcoming.addTask(task)} 
-        })
-    })
-}
-
-const findImportant = () => {
-    important.setTasks('');
-    projects.forEach((project) => {
-        if (project === today || project === upcoming || project === important) {return}
-
-        const projTasks = project.tasks
-        projTasks.forEach((task) => {
-            const prio = task.priority;
-            if (prio === 'High') {important.addTask(task)}
+const tasksForToday = () => {
+    today.tasks = [];
+    projects.forEach((proj) => {
+        if (proj === today || proj === upcoming || proj === important) {return}
+        const todayTasks = inbox.getTasksToday();
+        todayTasks.forEach((task) => {
+            today.tasks.push(task);
         })
     })
 }
@@ -238,7 +199,6 @@ projForm.onsubmit = function() {
         addEvent(newProject, buttonElement);  
     })
     appendProject(newProject, projName);
-    console.log(projects);
 
     document.querySelector('.projectModal').style.display = 'none';
 }
@@ -271,8 +231,8 @@ const displayTask = (title, desc, date, priority) => {
         currentProject.deleteTask(title);
         taskBody.remove();
     })
-
     const formattedDate = date.split('-').join('/');
+    if (date.split('-') === undefined) {formattedDate = date}
 
     taskTitle.textContent = title;
     taskDesc.textContent = desc;

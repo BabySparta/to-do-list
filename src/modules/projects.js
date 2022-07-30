@@ -1,4 +1,4 @@
-import task from "./task";
+import { isToday, startOfToday, toDate } from "date-fns";
 
 export default class project {
     constructor(name) {
@@ -29,5 +29,11 @@ export default class project {
 
     deleteTask(delTask) {
         this.tasks = this.tasks.filter((task) => task.getName() !== delTask)
+    }
+
+    getTasksToday() {
+        const tasksToday = this.tasks.filter((task) => {console.log(new Date(toDate())); isToday(new Date(2022, 7, 30)) === true})
+        console.log(isToday(new Date()))
+        return tasksToday;
     }
 }

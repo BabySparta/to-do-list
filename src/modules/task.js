@@ -21,6 +21,5 @@ export default class task {
     getDate() {
         return this.dueDate
     }
-    
 }
 
