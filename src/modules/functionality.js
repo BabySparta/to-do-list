@@ -86,7 +86,6 @@ const addEvent = (name, query) => {
     changeHeader.textContent = currentProject.getName();
 }
 
-
 /* Display project */
 
 const displayProject = (name) => {
@@ -140,10 +139,38 @@ taskForm.onsubmit = function() {
     const newTask = new task(name, desc, date, priority);
     newTask.setName(name);  
     currentProject.addTask(newTask);
-    
+    checkSpecial(date, newTask, priority);
     displayTask(name, desc, date, priority)
     modal.style.display = "none";   
 };
+
+const checkSpecial = (date, task, prio) => {
+    const todayForm = new Date().toLocaleDateString();
+    const todayArray = todayForm.split('/');
+    const month = todayArray[0];
+    const day = todayArray[1];
+    const year = todayArray[2];
+    let todayFormatted = year + '-' + month + '-' + day;
+    if (parseInt(month) < 10) {todayFormatted = year + '-0' + month + '-' + day}
+    console.log(today);
+    console.log(date);
+    if (date === todayFormatted) {today.addTask(task)}
+    if (isDateInThisWeek(date)) {upcoming.addTask(task)}
+    if (prio === 'High') {important.addTask(task)}
+}
+
+function isDateInThisWeek(date) {
+    const todayObj = new Date();
+    const todayDate = todayObj.getDate();
+    const todayDay = todayObj.getDay();
+  
+    const firstDayOfWeek = new Date(todayObj.setDate(todayDate - todayDay));
+  
+    const lastDayOfWeek = new Date(firstDayOfWeek);
+    lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6);
+  
+    return date >= firstDayOfWeek && date <= lastDayOfWeek;
+  }
 
 /* Add Project */
 
@@ -160,12 +187,14 @@ projForm.onsubmit = function() {
 
     const projName = document.querySelector('#projName').value;
     const newProject = new project(projName);
+    newProject.name = projName;
     appendProject(newProject, projName);
     const buttonElement = document.getElementById(projName.split(' ').join(''));
     buttonElement.addEventListener('click', () => {
-        addEvent(projName, buttonElement);  
+        addEvent(newProject, buttonElement);  
     })
     appendProject(newProject, projName);
+    console.log(projects);
 
     document.querySelector('.projectModal').style.display = 'none';
 }
