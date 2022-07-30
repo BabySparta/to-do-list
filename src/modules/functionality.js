@@ -1,5 +1,6 @@
 import project from "./projects";
 import task from "./task";
+import { toDate, isThisWeek, subDays } from 'date-fns'
 
 /* Modal */
 
@@ -58,18 +59,21 @@ const todayBtn = document.querySelector('#today');
 todayBtn.addEventListener('click', () => {
     addEvent(today, todayBtn);
     document.querySelector('.newTask').style.display = 'none'
+    findToday();
 })
 
 const upcomingBtn = document.querySelector('#upcoming');
 upcomingBtn.addEventListener('click', () => {
     addEvent(upcoming, upcomingBtn);
     document.querySelector('.newTask').style.display = 'none'
+    findWeek();
 })
 
 const importantBtn = document.querySelector('#important');
 importantBtn.addEventListener('click', () => {
     addEvent(important, importantBtn);
     document.querySelector('.newTask').style.display = 'none';
+    findImportant();
 });
 
 const addEvent = (name, query) => {
@@ -139,10 +143,12 @@ taskForm.onsubmit = function() {
     const newTask = new task(name, desc, date, priority);
     newTask.setName(name);  
     currentProject.addTask(newTask);
-    checkSpecial(date, newTask, priority);
+    /*checkSpecial(date, newTask, priority);*/
     displayTask(name, desc, date, priority)
     modal.style.display = "none";   
 };
+
+/* Date Functions */
 
 const checkSpecial = (date, task, prio) => {
     const todayForm = new Date().toLocaleDateString();
@@ -152,25 +158,63 @@ const checkSpecial = (date, task, prio) => {
     const year = todayArray[2];
     let todayFormatted = year + '-' + month + '-' + day;
     if (parseInt(month) < 10) {todayFormatted = year + '-0' + month + '-' + day}
-    console.log(today);
-    console.log(date);
     if (date === todayFormatted) {today.addTask(task)}
     if (isDateInThisWeek(date)) {upcoming.addTask(task)}
     if (prio === 'High') {important.addTask(task)}
 }
 
 function isDateInThisWeek(date) {
-    const todayObj = new Date();
-    const todayDate = todayObj.getDate();
-    const todayDay = todayObj.getDay();
-  
-    const firstDayOfWeek = new Date(todayObj.setDate(todayDate - todayDay));
-  
-    const lastDayOfWeek = new Date(firstDayOfWeek);
-    lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6);
-  
-    return date >= firstDayOfWeek && date <= lastDayOfWeek;
+      let formDate = toDate(new Date(date))
+      return isThisWeek(formDate);
   }
+
+const findToday = () => {
+    today.setTasks('');
+    projects.forEach((project) => {
+        if (project === today || project === upcoming || project === important) {return}
+
+        const projTasks = project.tasks;
+        console.log(projTasks);
+        projTasks.forEach((task) => {
+            const todayForm = new Date().toLocaleDateString();
+            const todayArray = todayForm.split('/');
+            const month = todayArray[0];
+            const day = todayArray[1];
+            const year = todayArray[2];
+            let todayFormatted = year + '-' + month + '-' + day;
+            if (parseInt(month) < 10) {todayFormatted = year + '-0' + month + '-' + day}
+
+            const taskDue = task.getDate();
+
+            if (taskDue === todayFormatted) {today.addTask(task)}
+        })
+    })
+}
+
+const findWeek = () => {
+    upcoming.setTasks('');
+    projects.forEach((project) => {
+        if (project.getName() === 'Today' || project.getName() === 'Upcoming' || project.getName() === 'Important') {return}
+        const projTasks = project.tasks
+        projTasks.forEach((task) => {
+            const date = task.getDate();
+            if (isDateInThisWeek(date)) {upcoming.addTask(task)} 
+        })
+    })
+}
+
+const findImportant = () => {
+    important.setTasks('');
+    projects.forEach((project) => {
+        if (project === today || project === upcoming || project === important) {return}
+
+        const projTasks = project.tasks
+        projTasks.forEach((task) => {
+            const prio = task.priority;
+            if (prio === 'High') {important.addTask(task)}
+        })
+    })
+}
 
 /* Add Project */
 
