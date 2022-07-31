@@ -64,12 +64,14 @@ todayBtn.addEventListener('click', () => {
 
 const upcomingBtn = document.querySelector('#upcoming');
 upcomingBtn.addEventListener('click', () => {
+    tasksForWeek();
     addEvent(upcoming, upcomingBtn);
     document.querySelector('.newTask').style.display = 'none'
 })
 
 const importantBtn = document.querySelector('#important');
 importantBtn.addEventListener('click', () => {
+    tasksForImportant();
     addEvent(important, importantBtn);
     document.querySelector('.newTask').style.display = 'none';
 });
@@ -141,38 +143,41 @@ taskForm.onsubmit = function() {
     const newTask = new task(name, desc, date, priority);
     newTask.setName(name);  
     currentProject.addTask(newTask);
-    checkSpecial(date, newTask, priority)
     displayTask(name, desc, date, priority)
     modal.style.display = "none";
 };
 
 /* Date Functions */
 
-const checkSpecial = (date, task, prio) => {
-    const todayForm = new Date().toLocaleDateString();
-    const todayArray = todayForm.split('/');
-    const month = todayArray[0];
-    const day = todayArray[1];
-    const year = todayArray[2];
-    let todayFormatted = year + '-' + month + '-' + day;
-    if (parseInt(month) < 10) {todayFormatted = year + '-0' + month + '-' + day}
-    if (date === todayFormatted) {today.addTask(task)}
-    if (isDateInThisWeek(date)) {upcoming.addTask(task)}
-    if (prio === 'High') {important.addTask(task)}
-}
-
-function isDateInThisWeek(date) {
-      let formDate = toDate(new Date(date))
-      return isThisWeek(formDate);
-  }
-
 const tasksForToday = () => {
     today.tasks = [];
     projects.forEach((proj) => {
         if (proj === today || proj === upcoming || proj === important) {return}
-        const todayTasks = inbox.getTasksToday();
+        const todayTasks = proj.getTasksToday();
         todayTasks.forEach((task) => {
             today.tasks.push(task);
+        })
+    })
+}
+
+const tasksForWeek = () => {
+    upcoming.tasks = [];
+    projects.forEach((proj) => {
+        if (proj === today || proj === upcoming || proj === important) {return}
+        const weekTasks = proj.getTasksWeek();
+        weekTasks.forEach((task) => {
+            upcoming.tasks.push(task);
+        })
+    })
+}
+
+const tasksForImportant = () => {
+    important.tasks = [];
+    projects.forEach((proj) => {
+        if (proj === today || proj === upcoming || proj === important) {return}
+        const importantTasks = proj.getTasksImportant();
+        importantTasks.forEach((task) => {
+            important.tasks.push(task);
         })
     })
 }

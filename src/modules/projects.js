@@ -1,4 +1,4 @@
-import { isToday, startOfToday, toDate } from "date-fns";
+import { isThisWeek, toDate} from "date-fns";
 
 export default class project {
     constructor(name) {
@@ -32,8 +32,24 @@ export default class project {
     }
 
     getTasksToday() {
-        const tasksToday = this.tasks.filter((task) => {console.log(new Date(toDate())); isToday(new Date(2022, 7, 30)) === true})
-        console.log(isToday(new Date()))
-        return tasksToday;
+        const todayForm = new Date().toLocaleDateString();
+        const todayArray = todayForm.split('/');
+        const month = todayArray[0];
+        const day = todayArray[1];
+        const year = todayArray[2];
+        let todayFormatted = year + '-' + month + '-' + day;
+        if (parseInt(month) < 10) {todayFormatted = year + '-0' + month + '-' + day}
+            const tasksToday = this.tasks.filter((task) => task.getDate() === todayFormatted)
+            return tasksToday;
+    }
+
+    getTasksWeek() {
+        const tasksWeek = this.tasks.filter((task) => isThisWeek(toDate(new Date(task.getDate()))))
+        return tasksWeek;
+    }
+
+    getTasksImportant() {
+        const tasksImportant = this.tasks.filter((task) => task.getPriority() === 'High');
+        return tasksImportant
     }
 }
