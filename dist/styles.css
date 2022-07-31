@@ -163,7 +163,7 @@
     display: flex;
     flex-direction: column;
     overflow: auto;
-    gap: 16px;
+    gap: 16px
 }
 
 .taskWrapTitle {
@@ -192,6 +192,7 @@
     border: 4px solid var(--secondaryColor);
     border-radius: 16px;
     padding: 16px;
+    box-shadow: 2px 2px 3px rgba(70, 70, 70, 0.3);
 }
 
 .taskBody :nth-child(1) {
@@ -211,6 +212,21 @@
     font-weight: 700;
 }
 
+.editContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.3rem;
+}
+
+.editTask {
+    outline: none;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--background);
+    transition: 0.2s ease-in-out;
+}
+
 .taskRemove {
     background-color: var(--background);
     border: none;
@@ -221,9 +237,10 @@
     font-weight: 700;
     font-family: 'Courier New', Courier, monospace;
     text-underline-offset: 4px;
+    transition: 0.2s ease-in-out;
 }
 
-.taskRemove:hover {
+.taskRemove:hover, .editTask:hover {
     transform: scale(1.05);
     cursor: pointer;
     transition: 0.2s ease-in-out;
@@ -342,7 +359,7 @@
       height: 10%;
   }
   
-  .modalTitle, .close {
+  .modalTitle, .close, .editClose {
       text-decoration: underline solid 4px var(--mainColor);
       text-underline-offset: 4px;
       font-size: 2rem;
@@ -352,12 +369,12 @@
       padding: 8px;
   }
   
-  .close:hover {
+  .close:hover, .editClose:hover {
       background-color: rgb(230, 230, 230);
       cursor: pointer;
   }
   
-  .modalForm {
+  .modalForm, .modalEditForm {
       height: 85%;
       display: flex;
       flex-direction: column;
@@ -492,4 +509,18 @@
     font-family: "Monaco", 'Courier New', Courier, monospace;
     transition: 0.2s ease-in-out;
     margin-top: 16px;
+}
+
+/* Edit Modal */
+
+.editModal {
+    display: none;
+    position: fixed; 
+    z-index: 1;  
+    padding-top: 200px;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.3);
 }

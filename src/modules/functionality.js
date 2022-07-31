@@ -1,6 +1,5 @@
 import project from "./projects";
 import task from "./task";
-import { toDate, isThisWeek, isToday } from 'date-fns'
 
 /* Modal */
 
@@ -229,6 +228,17 @@ const displayTask = (title, desc, date, priority) => {
     taskDue.classList.add('taskDue');
     const taskPriority = document.createElement('div');
     taskPriority.classList.add('taskPriority');
+    const editContainer = document.createElement('div');
+    editContainer.classList.add('editContainer');
+    const editTask = document.createElement('button');
+    editTask.classList.add('editTask');
+    editTask.addEventListener('click', () => {
+        editTaskModal(title, desc, date, priority);
+    })
+    const editImg = document.createElement('img');
+    editImg.classList.add('editImg');
+    editImg.src = './imgFont/edit.png';
+    editImg.alt = 'edit';
     const removeTask = document.createElement('button');
     removeTask.classList.add('taskRemove');
     removeTask.textContent = 'X';
@@ -252,7 +262,10 @@ const displayTask = (title, desc, date, priority) => {
     const wrapper1 = document.createElement('div');
     wrapper1.classList.add('wrapperTask');
     wrapper1.appendChild(taskTitle);
-    wrapper1.appendChild(removeTask);
+    wrapper1.appendChild(editContainer);
+    editContainer.appendChild(editTask);
+    editTask.appendChild(editImg);
+    editContainer.appendChild(removeTask);
     const wrapper2 = document.createElement('div');
     wrapper2.classList.add('wrapperTask');
     wrapper2.appendChild(taskDesc);
@@ -264,4 +277,53 @@ const displayTask = (title, desc, date, priority) => {
     taskBody.appendChild(wrapper1);
     taskBody.appendChild(wrapper2);
     taskBody.appendChild(wrapper3);
+}
+
+/* Edit Task */
+
+const editTaskModal = (title, desc, date, priority) => {
+    const editModal = document.querySelector('.editModal');
+    editModal.style.display = 'block';
+    projModal.style.display = 'none';
+
+    const editName = document.querySelector('.editName');
+    const editDesc = document.querySelector('.editDesc');
+    const editDate = document.querySelector('.editDate');
+    const editPrio = document.querySelector('.editPrio');
+
+    editName.value = title;
+    editDesc.value = desc;
+    editDate.value = date;
+    editPrio.value = priority;
+
+    const editClose = document.querySelector('.editClose')
+    editClose.addEventListener('click', () => {
+        editModal.style.display = 'none';
+    })
+
+    window.addEventListener('click', (event) => {
+        if (event.target == editModal) {
+            editModal.style.display =  'none'
+        }
+    })
+
+    const editForm = document.querySelector('.modalEditForm');
+    editForm.onsubmit = function() {
+        event.preventDefault();
+    
+        const name = document.querySelector('.editName').value;
+        const desc = document.querySelector('.editDesc').value;
+        const date = document.querySelector('.editDate').value;
+        const priority = document.querySelector('.editPrio').value;
+    
+        const thisTask = currentProject.tasks.filter((task) => task.getName() === title);
+        console.log(thisTask);
+        thisTask.title = name;
+        thisTask.desc = desc;
+        thisTask.dueDate = date;
+        thisTask.priority = priority;
+        console.log(thisTask);
+    
+        editModal.style.display = "none";
+    }
 }
