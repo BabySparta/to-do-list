@@ -83,7 +83,7 @@ const addEvent = (name, query) => {
     currentProject = name;
     document.querySelector('.newTask').style.display = 'flex';
     document.querySelector('.tasks').textContent = '';
-    const currTasks = currentProject.getTasks();
+    const currTasks = currentProject.tasks;
     currTasks.forEach((item) => displayTask(item.title, item.desc, item.dueDate, item.priority));
     const changeHeader = document.querySelector('.taskWrapTitle');
     changeHeader.textContent = currentProject.getName();
@@ -125,6 +125,7 @@ const displayProject = (name) => {
         delDOM();
         saveProjects(projects);
     })
+    saveProjects(projects);
 }
 
 /* Add Task */
@@ -143,10 +144,9 @@ taskForm.onsubmit = function() {
     newTask.setName(name);  
     currentProject.addTask(newTask);
     displayTask(name, desc, date, priority)
-    tasksForToday();
-    tasksForWeek();
-    tasksForImportant();
+ 
     modal.style.display = "none";
+    console.log(currentProject.tasks);
     saveProjects(projects);
 };
 
@@ -220,6 +220,7 @@ const appendProject = (newProject, projName) => {
 /* Display Tasks */
 
 const displayTask = (title, desc, date, priority) => {
+    console.log('hi');
     const taskDiv = document.querySelector('.tasks');
     const taskBody = document.createElement('div');
     taskBody.classList.add('taskBody');
@@ -253,7 +254,7 @@ const displayTask = (title, desc, date, priority) => {
     })
     const formattedDate = date.split('-').join('/');
     if (date.split('-') === undefined) {formattedDate = date}
-
+    console.log('hi');
     taskTitle.textContent = title;
     taskDesc.textContent = desc;
     taskPriority.textContent = "Priority: " + priority;
@@ -263,7 +264,7 @@ const displayTask = (title, desc, date, priority) => {
     if (formattedDate === '') {taskDue.textContent = "Due On: Whenever"}
     else {taskDue.textContent = "Due On: " + formattedDate}
 
-
+    console.log('hi');
     const wrapper1 = document.createElement('div');
     wrapper1.classList.add('wrapperTask');
     wrapper1.appendChild(taskTitle);
@@ -278,7 +279,7 @@ const displayTask = (title, desc, date, priority) => {
     wrapper3.classList.add('wrapperTask');
     wrapper3.appendChild(taskDue);
     wrapper3.appendChild(taskPriority);
-
+    console.log('hi');
     taskBody.appendChild(wrapper1);
     taskBody.appendChild(wrapper2);
     taskBody.appendChild(wrapper3);
@@ -349,18 +350,25 @@ const saveProjects = (array) => {
     localStorage.setItem('projects', JSON.stringify(array))
 }
 
-const projectsStored = JSON.parse(localStorage.getItem('projects'));
-
 const displayStored = () => {
-    projectsStored.forEach((project) => {
-        const projTasks = project.tasks
-        console.log(project);
-        projTasks.forEach((task) => {
-            console.log(task);
-        })
-    })
-}
-//localStorage.clear();
+    const storedProjects = JSON.parse(localStorage.getItem('projects'));
+    projects = storedProjects;
+    const inboxStored = storedProjects.filter((proj) => proj.name === 'Inbox')[0]
 
-saveProjects(projects);
-window.addEventListener('click', () => {displayStored()});
+    
+    storedProjects.forEach((project) => {
+        if (project.name !== 'Today' && project.name !== 'Upcoming' && project.name !== 'Important' && project.name !== 'Inbox') {
+            displayProject(project.name)
+        }
+    })
+    console.log(inboxStored);
+        inboxStored.tasks.forEach((task) => {
+            console.log('hi');
+            displayTask(task.title, task.desc, task.dueDate, task.priority)
+        })
+    
+    }
+
+displayStored();
+
+window.addEventListener('dragend', () => {console.log(JSON.parse(localStorage.getItem('projects'))); console.log(projects)})
