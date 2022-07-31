@@ -117,13 +117,13 @@ const displayProject = (name) => {
                 if (index > -1) { 
                   projects.splice(index, 1);
                 }
-            
         }
         const delDOM = () => {
             remove.parentElement.remove();
         }
         deleteProj();
         delDOM();
+        saveProjects(projects);
     })
 }
 
@@ -143,7 +143,11 @@ taskForm.onsubmit = function() {
     newTask.setName(name);  
     currentProject.addTask(newTask);
     displayTask(name, desc, date, priority)
+    tasksForToday();
+    tasksForWeek();
+    tasksForImportant();
     modal.style.display = "none";
+    saveProjects(projects);
 };
 
 /* Date Functions */
@@ -205,6 +209,7 @@ projForm.onsubmit = function() {
     appendProject(newProject, projName);
 
     document.querySelector('.projectModal').style.display = 'none';
+    saveProjects(projects);
 }
 
 const appendProject = (newProject, projName) => {
@@ -310,20 +315,52 @@ const editTaskModal = (title, desc, date, priority) => {
     const editForm = document.querySelector('.modalEditForm');
     editForm.onsubmit = function() {
         event.preventDefault();
-    
+
         const name = document.querySelector('.editName').value;
         const desc = document.querySelector('.editDesc').value;
         const date = document.querySelector('.editDate').value;
         const priority = document.querySelector('.editPrio').value;
-    
-        const thisTask = currentProject.tasks.filter((task) => task.getName() === title);
-        console.log(thisTask);
+
+        const thisTask = currentProject.tasks.filter((task) => task.getName() === title)[0];
         thisTask.title = name;
         thisTask.desc = desc;
         thisTask.dueDate = date;
         thisTask.priority = priority;
-        console.log(thisTask);
-    
+        thisTask.setName(name);
+
+        const taskContainer = document.querySelector('.tasks');
+        taskContainer.textContent = '';
+        currentProject.tasks.forEach((task) => {
+            displayTask(task.title, task.desc, task.dueDate, task.priority);
+        })
+
         editModal.style.display = "none";
+        tasksForToday();
+        tasksForWeek();
+        tasksForImportant();
+        saveProjects(projects);
     }
 }
+
+
+/* Local Storage */
+
+const saveProjects = (array) => {
+    localStorage.setItem('projects', JSON.stringify(array))
+}
+
+const projectsStored = JSON.parse(localStorage.getItem('projects'));
+
+const displayStored = () => {
+    projectsStored.forEach((project) => {
+        const projTasks = project.tasks
+        console.log(project);
+        projTasks.forEach((task) => {
+            console.log(task);
+        })
+    })
+}
+//localStorage.clear();
+
+saveProjects(projects);
+window.addEventListener('click', () => {displayStored()});
