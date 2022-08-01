@@ -1,3 +1,3 @@
-import testing from "./modules/functionality";
+import all from "./modules/functionality";
 
-testing;
+all;

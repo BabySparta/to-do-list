@@ -23,12 +23,12 @@ export default class project {
     }
 
     addTask(newTask) {
-        if (this.tasks.find((task) => task.getName() === newTask)) {return}
+        if (this.tasks.find((task) => task.name === newTask)) {return}
         else {this.tasks.push(newTask)};
     }
 
     deleteTask(delTask) {
-        this.tasks = this.tasks.filter((task) => task.getName() !== delTask)
+        this.tasks = this.tasks.filter((task) => task.name !== delTask)
     }
 
     getTasksToday() {
@@ -39,17 +39,17 @@ export default class project {
         const year = todayArray[2];
         let todayFormatted = year + '-' + month + '-' + day;
         if (parseInt(month) < 10) {todayFormatted = year + '-0' + month + '-' + day}
-            const tasksToday = this.tasks.filter((task) => task.getDate() === todayFormatted)
+            const tasksToday = this.tasks.filter((task) => task.dueDate === todayFormatted)
             return tasksToday;
     }
 
     getTasksWeek() {
-        const tasksWeek = this.tasks.filter((task) => isThisWeek(toDate(new Date(task.getDate()))))
+        const tasksWeek = this.tasks.filter((task) => isThisWeek(toDate(new Date(task.dueDate))))
         return tasksWeek;
     }
 
     getTasksImportant() {
-        const tasksImportant = this.tasks.filter((task) => task.getPriority() === 'High');
+        const tasksImportant = this.tasks.filter((task) => task.priority === 'High');
         return tasksImportant
     }
 }

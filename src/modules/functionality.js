@@ -83,10 +83,10 @@ const addEvent = (name, query) => {
     currentProject = name;
     document.querySelector('.newTask').style.display = 'flex';
     document.querySelector('.tasks').textContent = '';
-    const currTasks = currentProject.tasks;
+    const currTasks = name.tasks;
     currTasks.forEach((item) => displayTask(item.title, item.desc, item.dueDate, item.priority));
     const changeHeader = document.querySelector('.taskWrapTitle');
-    changeHeader.textContent = currentProject.getName();
+    changeHeader.textContent = currentProject.name;
 }
 
 /* Display project */
@@ -112,7 +112,7 @@ const displayProject = (name) => {
     remove.addEventListener('click', () => {
         const deleteProj = () => {
             const projText = remove.parentElement.firstChild
-            const projToRemove = projects.find((proj) => proj.getName() === projText.textContent); 
+            const projToRemove = projects.find((proj) => proj.name === projText.textContent); 
                 const index = projects.indexOf(projToRemove);
                 if (index > -1) { 
                   projects.splice(index, 1);
@@ -125,7 +125,6 @@ const displayProject = (name) => {
         delDOM();
         saveProjects(projects);
     })
-    saveProjects(projects);
 }
 
 /* Add Task */
@@ -141,12 +140,12 @@ taskForm.onsubmit = function() {
     const priority = document.querySelector('#urgent').value;
 
     const newTask = new task(name, desc, date, priority);
-    newTask.setName(name);  
-    currentProject.addTask(newTask);
+    newTask.name = name;  
+    if (currentProject.tasks.find((task) => task.name === newTask.name)) {alert('You can not have two tasks with identical names'); return}
+    else {currentProject.tasks.push(newTask)};
     displayTask(name, desc, date, priority)
  
     modal.style.display = "none";
-    console.log(currentProject.tasks);
     saveProjects(projects);
 };
 
@@ -206,21 +205,20 @@ projForm.onsubmit = function() {
     buttonElement.addEventListener('click', () => {
         addEvent(newProject, buttonElement);  
     })
-    appendProject(newProject, projName);
 
     document.querySelector('.projectModal').style.display = 'none';
     saveProjects(projects);
 }
 
 const appendProject = (newProject, projName) => {
-    if (projects.find((proj) => proj.getName() === newProject.getName())) {return}
+    if (projects.find((proj) => proj.name === newProject.name)) {alert('You can not have two Projects with identical names')}
     else {projects.push(newProject); displayProject(projName);}
 }
 
 /* Display Tasks */
 
 const displayTask = (title, desc, date, priority) => {
-    console.log('hi');
+
     const taskDiv = document.querySelector('.tasks');
     const taskBody = document.createElement('div');
     taskBody.classList.add('taskBody');
@@ -249,12 +247,13 @@ const displayTask = (title, desc, date, priority) => {
     removeTask.classList.add('taskRemove');
     removeTask.textContent = 'X';
     removeTask.addEventListener('click', () => {
-        currentProject.deleteTask(title);
+        currentProject.tasks = currentProject.tasks.filter((task) => task.name !== title)
         taskBody.remove();
+        saveProjects(projects);
     })
     const formattedDate = date.split('-').join('/');
     if (date.split('-') === undefined) {formattedDate = date}
-    console.log('hi');
+
     taskTitle.textContent = title;
     taskDesc.textContent = desc;
     taskPriority.textContent = "Priority: " + priority;
@@ -264,7 +263,6 @@ const displayTask = (title, desc, date, priority) => {
     if (formattedDate === '') {taskDue.textContent = "Due On: Whenever"}
     else {taskDue.textContent = "Due On: " + formattedDate}
 
-    console.log('hi');
     const wrapper1 = document.createElement('div');
     wrapper1.classList.add('wrapperTask');
     wrapper1.appendChild(taskTitle);
@@ -279,7 +277,6 @@ const displayTask = (title, desc, date, priority) => {
     wrapper3.classList.add('wrapperTask');
     wrapper3.appendChild(taskDue);
     wrapper3.appendChild(taskPriority);
-    console.log('hi');
     taskBody.appendChild(wrapper1);
     taskBody.appendChild(wrapper2);
     taskBody.appendChild(wrapper3);
@@ -322,12 +319,12 @@ const editTaskModal = (title, desc, date, priority) => {
         const date = document.querySelector('.editDate').value;
         const priority = document.querySelector('.editPrio').value;
 
-        const thisTask = currentProject.tasks.filter((task) => task.getName() === title)[0];
+        const thisTask = currentProject.tasks.filter((task) => task.name === title)[0];
         thisTask.title = name;
         thisTask.desc = desc;
         thisTask.dueDate = date;
         thisTask.priority = priority;
-        thisTask.setName(name);
+        thisTask.name = name;
 
         const taskContainer = document.querySelector('.tasks');
         taskContainer.textContent = '';
@@ -352,18 +349,22 @@ const saveProjects = (array) => {
 
 const displayStored = () => {
     const storedProjects = JSON.parse(localStorage.getItem('projects'));
-    projects = storedProjects;
     const inboxStored = storedProjects.filter((proj) => proj.name === 'Inbox')[0]
+    inbox.setTasks(inboxStored.tasks);
 
     
     storedProjects.forEach((project) => {
         if (project.name !== 'Today' && project.name !== 'Upcoming' && project.name !== 'Important' && project.name !== 'Inbox') {
-            displayProject(project.name)
+            console.log(project)
+            displayProject(project.name);
+            const nameFormatted = document.getElementById(project.name.split(' ').join(''));
+            nameFormatted.addEventListener('click', () => {
+                addEvent(project, nameFormatted);
+            })
         }
     })
-    console.log(inboxStored);
+
         inboxStored.tasks.forEach((task) => {
-            console.log('hi');
             displayTask(task.title, task.desc, task.dueDate, task.priority)
         })
     
@@ -371,4 +372,4 @@ const displayStored = () => {
 
 displayStored();
 
-window.addEventListener('dragend', () => {console.log(JSON.parse(localStorage.getItem('projects'))); console.log(projects)})
+window.addEventListener('dragend', () => {})
